@@ -98,7 +98,7 @@ class ProcessThread(QThread):
 
     def __init__(self, engine:Engine, img_path:str):
         super().__init__()
-        self.results = []
+        self.results = None
         self.engine = engine
         self.img_path = img_path
 
@@ -133,14 +133,14 @@ class ProcessThread(QThread):
             extractioncontorsim = _shape_convert(extractioncontorsim)
             extractionboxesim = _shape_convert(extractionboxesim)
             
-            self.results.append({
+            self.results = {
                 'path': self.img_path,
                 'original': img,
                 'process': np.hstack([letterfiltered,saturationfiltered,extractioncontorsim]),
                 'result': extractionboxesim,
-            })
+            }
             
-            self.finished.emit(self.results)
+            self.finished.emit([self.results])
         except Exception as e:
             self.error.emit(str(e))
             
@@ -408,25 +408,25 @@ class ReaderGui(QMainWindow):
         button_layout.addWidget(self.process_single_btn)
         
         self.process_batch_btn = QPushButton("⏭ Execute Batch")
-        # self.process_batch_btn.clicked.connect(self.process_batch)
+        self.process_batch_btn.clicked.connect(self.process_batch)
         self.process_batch_btn.setEnabled(False)
         self.process_batch_btn.setCursor(Qt.CursorShape.PointingHandCursor)
         button_layout.addWidget(self.process_batch_btn)
         
         self.export_single_btn = QPushButton("💾 Export Single")
-        # self.export_single_btn.clicked.connect(self.export_single)
+        self.export_single_btn.clicked.connect(self.export_single)
         self.export_single_btn.setEnabled(False)
         self.export_single_btn.setCursor(Qt.CursorShape.PointingHandCursor)
         button_layout.addWidget(self.export_single_btn)
         
         self.export_batch_btn = QPushButton("💾 Export Batch")
-        # self.export_batch_btn.clicked.connect(self.export_batch)
+        self.export_batch_btn.clicked.connect(self.export_batch)
         self.export_batch_btn.setEnabled(False)
         self.export_batch_btn.setCursor(Qt.CursorShape.PointingHandCursor)
         button_layout.addWidget(self.export_batch_btn)
         
         self.clear_btn = QPushButton("🗑 Clear")
-        # self.clear_btn.clicked.connect(self.clear_all)
+        self.clear_btn.clicked.connect(self.clear_all)
         self.clear_btn.setCursor(Qt.CursorShape.PointingHandCursor)
         button_layout.addWidget(self.clear_btn)
         
@@ -572,7 +572,7 @@ class ReaderGui(QMainWindow):
                 
     def on_process_finished(self, results):
         """İşleme tamamlandığında"""
-        # Sonucu mevcut index'e ekle
+        # Sonucu mevcut index'e ekle (results bir liste, [0] indeksi dict'tir)
         self.process_results[self.current_image_index] = results[0]
         
         self.progress_bar.setVisible(False)
@@ -640,8 +640,233 @@ class ReaderGui(QMainWindow):
         pixmap = QPixmap.fromImage(qt_image)
         
         label.set_pixmap(pixmap)
+    
+    def process_batch(self):
+        """Tüm görselleri batch işle"""
+        if not self.image_paths:
+            QMessageBox.warning(self, "⚠️ Uyarı", "İşlemek için resim seçilmemiş.")
+            return
         
-from PyQt6.QtWidgets import QApplication
+        self.progress_bar.setVisible(True)
+        self.progress_bar.setValue(0)
+        self.process_batch_btn.setEnabled(False)
+        
+        # Batch işleme başlat
+        self.batch_process_index = 0
+        self._process_batch_next()
+    
+    def _process_batch_next(self):
+        """Batch'teki bir sonraki resmi işle"""
+        if self.batch_process_index < len(self.image_paths):
+            # Önce resmi seç
+            self.select_image(self.batch_process_index)
+            
+            # Sonra işle
+            img_path = self.image_paths[self.batch_process_index]
+            
+            self.process_thread = ProcessThread(self.engine, img_path)
+            self.process_thread.progress.connect(self.progress_bar.setValue)
+            self.process_thread.finished.connect(self._on_batch_process_finished)
+            self.process_thread.error.connect(self.on_process_error)
+            self.process_thread.start()
+        else:
+            # Batch tamamlandı
+            self.progress_bar.setVisible(False)
+            self.process_batch_btn.setEnabled(True)
+            self.export_batch_btn.setEnabled(True)
+            QMessageBox.information(self, "✅ Tamamlandı", f"Tüm {len(self.image_paths)} resim işlendi.")
+    
+    def _on_batch_process_finished(self, results):
+        """Batch işlemde bir resim tamamlandığında"""
+        # Sonucu kaydet (results bir liste, [0] indeksi dict'tir)
+        self.process_results[self.batch_process_index] = results[0]
+        
+        # İlerleme güncelle
+        self.batch_process_index += 1
+        progress = int((self.batch_process_index / len(self.image_paths)) * 100)
+        self.progress_bar.setValue(progress)
+        
+        # Bir sonraki resmi işle
+        self._process_batch_next()
+    
+    def export_single(self):
+        """Seçili resmi ve işleme sonuçlarını klasöre kaydет"""
+        if self.current_image_index >= len(self.image_paths):
+            QMessageBox.warning(self, "⚠️ Hata", "Geçerli bir resim seçilmemiş.")
+            return
+        
+        # Hedef klasör seç
+        target_dir = QFileDialog.getExistingDirectory(
+            self,
+            "Kaydedilecek Klasörü Seç",
+            ""
+        )
+        
+        if not target_dir:
+            return
+        
+        # Seçili resmin adını al (uzantı hariç)
+        img_path = self.image_paths[self.current_image_index]
+        img_name = Path(img_path).stem
+        
+        # Resim adıyla yeni klasör oluştur
+        export_dir = Path(target_dir) / img_name
+        export_dir.mkdir(exist_ok=True)
+        
+        # İşlenmiş sonuç var mı kontrol et
+        has_result = (
+            self.process_results and 
+            self.current_image_index < len(self.process_results) and 
+            self.process_results[self.current_image_index] is not None
+        )
+        
+        try:
+            if has_result:
+                result = self.process_results[self.current_image_index]
+                
+                # Original kaydет
+                original_path = export_dir / f"{img_name}_original.png"
+                cv2.imwrite(str(original_path), result['original'])
+                
+                # Process kaydет
+                process_path = export_dir / f"{img_name}_process.png"
+                cv2.imwrite(str(process_path), result['process'])
+                
+                # Result kaydет
+                result_path = export_dir / f"{img_name}_result.png"
+                cv2.imwrite(str(result_path), result['result'])
+                
+                QMessageBox.information(
+                    self, 
+                    "✅ Kaydedildi", 
+                    f"Resim başarıyla kaydedildi:\n{export_dir}"
+                )
+            else:
+                # Sadece orijinal kaydет
+                img = cv2.imread(img_path)
+                original_path = export_dir / f"{img_name}_original.png"
+                cv2.imwrite(str(original_path), img)
+                
+                QMessageBox.information(
+                    self, 
+                    "ℹ️ Bilgi", 
+                    f"Sadece orijinal resim kaydedildi (işlenmiş sonuç yok):\n{export_dir}"
+                )
+        
+        except Exception as e:
+            QMessageBox.critical(self, "❌ Hata", f"Kaydederken hata oluştu: {str(e)}")
+    
+    def export_batch(self):
+        """Tüm görselleri batch olarak klasörlere kaydет"""
+        if not self.image_paths:
+            QMessageBox.warning(self, "⚠️ Hata", "Kaydedilecek resim yok.")
+            return
+        
+        # Hedef klasör seçimi sadece bir kez
+        target_dir = QFileDialog.getExistingDirectory(
+            self,
+            "Tüm Dosyaları Kaydedilecek Ana Klasörü Seç",
+            ""
+        )
+        
+        if not target_dir:
+            return
+        
+        self.progress_bar.setVisible(True)
+        self.progress_bar.setValue(0)
+        self.export_batch_btn.setEnabled(False)
+        
+        success_count = 0
+        
+        try:
+            for idx, img_path in enumerate(self.image_paths):
+                img_name = Path(img_path).stem
+                export_dir = Path(target_dir) / img_name
+                export_dir.mkdir(exist_ok=True)
+                
+                # İşlenmiş sonuç var mı kontrol et
+                has_result = (
+                    self.process_results and 
+                    idx < len(self.process_results) and 
+                    self.process_results[idx] is not None
+                )
+                
+                if has_result:
+                    result = self.process_results[idx]
+                    
+                    # Original kaydет
+                    cv2.imwrite(str(export_dir / f"{img_name}_original.png"), result['original'])
+                    
+                    # Process kaydет
+                    cv2.imwrite(str(export_dir / f"{img_name}_process.png"), result['process'])
+                    
+                    # Result kaydет
+                    cv2.imwrite(str(export_dir / f"{img_name}_result.png"), result['result'])
+                else:
+                    # Sadece orijinal kaydет
+                    img = cv2.imread(img_path)
+                    cv2.imwrite(str(export_dir / f"{img_name}_original.png"), img)
+                
+                success_count += 1
+                progress = int(((idx + 1) / len(self.image_paths)) * 100)
+                self.progress_bar.setValue(progress)
+            
+            self.progress_bar.setVisible(False)
+            self.export_batch_btn.setEnabled(True)
+            
+            QMessageBox.information(
+                self, 
+                "✅ Tamamlandı", 
+                f"{success_count} resim başarıyla kaydedildi:\n{target_dir}"
+            )
+        
+        except Exception as e:
+            self.progress_bar.setVisible(False)
+            self.export_batch_btn.setEnabled(True)
+            QMessageBox.critical(self, "❌ Hata", f"Batch kaydederken hata oluştu: {str(e)}")
+    
+    def clear_all(self):
+        """Tüm görselleri ve sonuçları temizle"""
+        if not self.image_paths:
+            QMessageBox.information(self, "ℹ️ Bilgi", "Temizlenecek resim yok.")
+            return
+        
+        reply = QMessageBox.question(
+            self,
+            "❓ Onay",
+            "Tüm görselleri ve işleme sonuçlarını temizlemek istediğinizden emin misiniz?",
+            QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No
+        )
+        
+        if reply == QMessageBox.StandardButton.Yes:
+            # Thumbnail'leri kaldır
+            while self.thumbnail_layout.count() > 1:
+                item = self.thumbnail_layout.takeAt(0)
+                if item.widget():
+                    item.widget().deleteLater()
+            
+            # Listeleri temizle
+            self.image_paths = []
+            self.process_results = []
+            self.thumbnail_buttons = []
+            self.current_image_index = 0
+            
+            # UI temizle
+            self.original_label.set_pixmap(QPixmap())
+            self.process_label.set_pixmap(QPixmap())
+            self.result_label.set_pixmap(QPixmap())
+            self.output_info.setText("Resim yok")
+            self.status_label.setText("Durum: Hazır")
+            
+            # Butonları devre dışı bırak
+            self.process_single_btn.setEnabled(False)
+            self.process_batch_btn.setEnabled(False)
+            self.export_single_btn.setEnabled(False)
+            self.export_batch_btn.setEnabled(False)
+            
+            QMessageBox.information(self, "✅ Temizlendi", "Tüm görseller başarıyla temizlendi.")
+        
+
 import sys
 
 if __name__ == "__main__":
