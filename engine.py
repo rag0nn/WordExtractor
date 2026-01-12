@@ -37,14 +37,8 @@ class _EngineSteps:
     def fixation(img:cv2.Mat)->cv2.Mat:
         orig_height,orig_width = img.shape[:2]
         
-        # pad = 20
-        # img = cv2.copyMakeBorder(
-        #     img, pad, pad, pad, pad,
-        #     cv2.BORDER_REPLICATE,
-        # )
         summary = img.copy()
         
-        print("SUM: ",summary.shape)
         gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
         blur = cv2.GaussianBlur(gray, (7, 7), 0)
@@ -156,14 +150,11 @@ class _EngineSteps:
         fixed = cv2.warpPerspective(img, H, (width, height))
 
         summary = np.hstack([summary,cntim])
-        print("SUM: ",summary.shape)
         
         summary = np.hstack([summary,cv2.resize(fixed, img.shape[::2][::-1])])
-        print("SUM: ",summary.shape)
         
         fixed = cv2.resize(fixed,(orig_width,orig_height))
         
-        print("Fixed: ", fixed.shape)
         doc = np.array(doc, dtype=np.int32).reshape(-1, 1, 2)
         
         cv2.drawContours(
@@ -173,8 +164,7 @@ class _EngineSteps:
             (0, 255, 0),  # renk
             thickness=cv2.FILLED
         )
-
-        
+ 
         return fixed,summary
     
     @staticmethod
@@ -461,9 +451,9 @@ class Engine:
     
     def fixation(self,img):
         img, summary = _EngineSteps.fixation(img)
-        summary = cv2.resize(summary,(1250,700))
-        cv2.imshow("Fixation summary", summary)
-        cv2.waitKey(0)
+        # summary = cv2.resize(summary,(1250,700))
+        # cv2.imshow("Fixation summary", summary)
+        # cv2.waitKey(0)
         
         so_fix = self._print_process_step(img.copy(),"Fixation")
         return img, so_fix

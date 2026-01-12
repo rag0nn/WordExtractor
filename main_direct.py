@@ -38,7 +38,7 @@ def show(imgs,h_count = 3, frame_size = (1540,720)):
     # prepare to show and show
     for k, im in enumerate(mon_imgs):
         im = cv2.resize(im,frame_size)
-        print("MON SHAPE: ", im.shape)
+        print(f"MON {k} SHAPE: ", im.shape)
         cv2.namedWindow(f"{k}",cv2.WINDOW_NORMAL)
         cv2.imshow(f"{k}",im)
     
@@ -67,8 +67,8 @@ paths = [
     r"C:\Users\asus\rag0nn\EngReader\test_data\s-0.jpg",
     # r"C:\Users\asus\rag0nn\EngReader\test_data\s-1.jpg",
     # r"C:\Users\asus\rag0nn\EngReader\test_data\s-2.jpg",
-    # r"C:\Users\asus\rag0nn\EngReader\test_data\s-3.jpg",
-    r"C:\Users\asus\rag0nn\EngReader\test_data\s-4.jpg",
+    # r"C:\Users\asus\rag0nn\EngReader\test_data\s-3.jpg",q
+    # r"C:\Users\asus\rag0nn\EngReader\test_data\s-4.jpg",
     
     
     # r"C:\Users\asus\rag0nn\EngReader\test_data\t-5.jpg",

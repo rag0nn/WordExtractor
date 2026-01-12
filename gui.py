@@ -112,31 +112,42 @@ class ProcessThread(QThread):
             if img is None:
                 raise Exception(f"Görüntü yüklenemiyor: {self.img_path}")
             
-            preprocessed = self.engine.preprocess(img)
-            self.progress.emit(20)
-            
-            letterfiltered = self.engine.letterFilters(preprocessed)
-            self.progress.emit(40)
-            
-            saturationfiltered = self.engine.saturationFilters(letterfiltered)
-            self.progress.emit(60)
-            
-            extractioncontorsim, contours = self.engine.extractionContours(saturationfiltered)
-            self.progress.emit(80)
-            
-            extractionboxesim, boxes = self.engine.extractionRect(saturationfiltered,contours)
-            self.progress.emit(100)
+            fixed, so_fixed = self.engine.fixation(img)
+            self.progress.emit(10)    
+            skewed,so_skewed_projectprofile, so_skewed_tesseract = self.engine.skew(fixed)
+            self.progress.emit(20)    
+            preprocessed, so_preprocesed = self.engine.preprocess(skewed)
+            self.progress.emit(30)    
+            letterfiltered, so_letter_filtered = self.engine.letterFilters(preprocessed)
+            self.progress.emit(40)    
+            blurfiltered, so_blured = self.engine.blurFilter(letterfiltered)
+            self.progress.emit(50)    
+            saturationfiltered, so_saturated = self.engine.saturationFilters(blurfiltered)
+            self.progress.emit(60)    
+            extractioncontorsim, contours, so_contour = self.engine.extractionContours(saturationfiltered)
+            self.progress.emit(80)    
+            extractionboxesim, boxes, so_extraction_Rect = self.engine.extractionRect(saturationfiltered,contours)
+            self.progress.emit(100)    
+                 
+            so_fixed = _shape_convert(so_fixed)
+            so_skewed_tesseract = _shape_convert(so_skewed_tesseract)
+            so_skewed_projectprofile = _shape_convert(so_skewed_projectprofile)
+            process = np.hstack([_shape_convert(im) for im in [
+                so_fixed,
+                so_skewed_tesseract, 
+                so_skewed_projectprofile,
+                so_preprocesed,
+                so_letter_filtered,
+                so_blured,
+                so_saturated,
+                so_contour,
+                so_extraction_Rect
+                ]])
 
-            preprocessed = _shape_convert(preprocessed)
-            letterfiltered = _shape_convert(letterfiltered)
-            saturationfiltered = _shape_convert(saturationfiltered)
-            extractioncontorsim = _shape_convert(extractioncontorsim)
-            extractionboxesim = _shape_convert(extractionboxesim)
-            
             self.results = {
                 'path': self.img_path,
                 'original': img,
-                'process': np.hstack([letterfiltered,saturationfiltered,extractioncontorsim]),
+                'process': process,
                 'result': extractionboxesim,
             }
             
