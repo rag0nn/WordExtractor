@@ -14,8 +14,8 @@ class Word:
         return (self.x,self.y,self.w,self.h)
     
     def get_as_point(self):
-        pt1 = (self.x, self.y + 4)
-        pt2 = (self.x + self.w +30, self.y + self.h -4)
+        pt1 = (self.x, self.y )
+        pt2 = (self.x + self.w , self.y + self.h)
         return pt1, pt2
 
     def __repr__(self):
