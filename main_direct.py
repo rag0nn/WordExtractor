@@ -26,6 +26,10 @@ def show(imgs,h_count = 3, frame_size = (1540,720)):
     mon_imgs = []
     for i in range(part_count):
         ims = imgs[i * h_count:i * h_count + h_count]
+        for j,im in enumerate(ims):
+            w = int(frame_size[0] / part_count)
+            h = int(frame_size[1])
+            ims[j] = cv2.resize(im,(w,h))
         # print("Segment length: ",len(ims))
         # for im in ims:
         #     print("Sub image shape: ", im.shape)

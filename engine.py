@@ -30,9 +30,133 @@ class _EngineSteps:
         [-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1],
         [-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1],
     ], dtype=np.float32)
+   
+    kernel3 = np.array([
+        [0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,],
+        [0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,],
+        [0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,],
+        [0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,],
+        [0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,],
+        [-0.5,-0.2,-0.1,0.6,0.8,1,1,1,1,1,1,1,1,1,0.8,0.6,-0.1,-0.2,-0.5],
+        [-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,],
+        [-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,],
+        [-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,],
+        [-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,],
+        [-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,],
+    ], dtype=np.float32)
+     
+    kernel4 = np.array([
+        [-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,],
+        [-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,],
+        [-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,],
+        [-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,],
+        [-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,],
+        [-0.5,-0.2,-0.1,0.6,0.8,1,1,1,1,1,1,1,1,1,0.8,0.6,-0.1,-0.2,-0.5],
+        [0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,],
+        [0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,],
+        [0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,],
+        [0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,],
+        [0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,],
+
+    ], dtype=np.float32)
+    kernel5 = np.array([
+        [-0.5,-0.5,-0.5],
+        [-0.5,-0.5,-0.5],
+        [-0.5,-0.5,-0.5],
+        [-0.5,-0.5,-0.5],
+        [-0.5,-0.5,-0.5],
+        [0,0,0],
+        [0,0,0],
+        [0,0,0],
+        [0.1,0.1,0.1],
+        [0.1,0.1,0.1],
+        [0.1,0.1,0.1],
+        [0.1,0.1,0.1],
+        [0.1,0.1,0.1],
+        [0.1,0.1,0.1],
+        [0.1,0.1,0.1],
+        [0,0,0],
+        [0,0,0],
+        [0,0,0],
+        [-0.5,-0.5,-0.5],
+        [-0.5,-0.5,-0.5],
+        [-0.5,-0.5,-0.5],
+        [-0.5,-0.5,-0.5],
+        [-0.5,-0.5,-0.5],
+    ], dtype=np.float32)    
+    kernel6 = np.array([
+        [-0.5,-0.5,-0.5],
+        [-0.5,-0.5,-0.5],
+        [-0.5,-0.5,-0.5],
+        [-0.5,-0.5,-0.5],
+        [0.1,0.1,0.1],
+        [0.1,0.1,0.1],
+        [0.1,0.1,0.1],
+        [0.1,0.1,0.1],
+        [0.1,0.1,0.1],
+        [0.1,0.1,0.1],
+        [0.1,0.1,0.1],
+        [0.1,0.1,0.1],
+        [0.1,0.1,0.1],
+        [0.1,0.1,0.1],
+        [0.1,0.1,0.1],
+        [-0.5,-0.5,-0.5],
+        [-0.5,-0.5,-0.5],
+        [-0.5,-0.5,-0.5],
+        [-0.5,-0.5,-0.5],
+    ], dtype=np.float32)
+    kernelX = np.array([
+        # [,,,,,,,,,,,,,,,,,,,,,,]
+        [0,0,0,0,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0,0,0,0],
+        [0,0,0,0,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0,0,0,0],
+        [0,0,0,0,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0,0,0,0],
+        [0,0,0,0,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0,0,0,0],
+        [0,0,0,0,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0,0,0,0],
+        [0,0,0,0,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0,0,0,0],
+        [0,0,0,0,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0,0,0,0],
+        [0,0,0,0,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0,0,0,0],
+        [0,0,0,0,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0,0,0,0],
+        [0,0,0,0,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0,0,0,0],
+        [0,0,0,0,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0,0,0,0],
+        [0,0,0,0,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0,0,0,0],
+        [0,0,0,0,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0,0,0,0],
+        [0,0,0,0,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0,0,0,0],
+        [0,0,0,0,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0,0,0,0],
+        [0,0,0,0,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0,0,0,0],
+        [0,0,0,0,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0,0,0,0],
+        [0,0,0,0,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0,0,0,0],
+        [0.1,0.1,0.1,0.1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0.1,0.1,0.1,0.1],
+        [0.1,0.1,0.1,0.1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0.1,0.1,0.1,0.1],
+        [0.1,0.1,0.1,0.1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0.1,0.1,0.1,0.1],
+        [0.1,0.1,0.1,0.1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0.1,0.1,0.1,0.1],
+        [0.1,0.1,0.1,0.1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0.1,0.1,0.1,0.1],
+        [0.1,0.1,0.1,0.1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0.1,0.1,0.1,0.1],
+        [0.1,0.1,0.1,0.1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0.1,0.1,0.1,0.1],
+        [0,0,0,0,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,0,0,0,0],
+        [0,0,0,0,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,0,0,0,0],
+        [0,0,0,0,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,0,0,0,0],
+        [0,0,0,0,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,0,0,0,0],
+        [0,0,0,0,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,0,0,0,0],
+        [0,0,0,0,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,0,0,0,0],
+        [0,0,0,0,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,0,0,0,0],
+        [0,0,0,0,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,0,0,0,0],
+        [0,0,0,0,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,0,0,0,0],
+        [0,0,0,0,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,0,0,0,0],
+        [0,0,0,0,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,0,0,0,0],
+        [0,0,0,0,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,0,0,0,0],
+        [0,0,0,0,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,0,0,0,0],
+        [0,0,0,0,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,0,0,0,0],
+        [0,0,0,0,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,0,0,0,0],
+        [0,0,0,0,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,0,0,0,0],
+        [0,0,0,0,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,0,0,0,0]
+
+    ], dtype=np.float32)
     
     RATIOHW = 1.4
-    
+    # WIDTH = 1240
+    # HEIGHT = 1754
+    WIDTH = 2480
+    HEIGHT = 3508
     @staticmethod
     def fixation(img:cv2.Mat)->cv2.Mat:
         orig_height,orig_width = img.shape[:2]
@@ -284,9 +408,10 @@ class _EngineSteps:
         return deskewed
 
     @staticmethod
-    def preprocess(img:cv2.Mat)->cv2.Mat:
+    def preprocess(img:cv2.Mat,width,height)->cv2.Mat:
         gray = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
         gray = cv2.bitwise_not(gray)
+        gray = cv2.resize(gray,(width,height))
         return gray
     
     @staticmethod
@@ -314,7 +439,14 @@ class _EngineSteps:
         k = np.ones((1,33), np.uint8)  # Define 5x5 kernel   
         morph1 = cv2.dilate(morph1, k, 1)
            
-        ret,thresh = cv2.threshold(morph1,100,255,cv2.THRESH_OTSU)
+        # ret, thresh = cv2.threshold(
+        #     morph1, 0, 255,
+        #     cv2.THRESH_BINARY + cv2.THRESH_OTSU
+        # )
+        ret, thresh = cv2.threshold(
+            morph1, 190, 255,
+            cv2.THRESH_BINARY
+        )
         return thresh
     
     @staticmethod
@@ -325,25 +457,52 @@ class _EngineSteps:
         #         cv2.drawContours(cnt_image, contours, -1, (255,120,0), 5)
         return cnt_image, contours
     
+    # @staticmethod
+    # def extractionRect(img, contours):
+    #     boxes = []
+    #     for cnt in contours:
+    #         if len(cnt) < 3:
+    #             continue   # geçersiz contour
+            
+    #         area = cv2.contourArea(cnt)
+    #         if area > 1 and area < 10000:
+    #             rect = cv2.minAreaRect(cnt)
+    #             box = cv2.boxPoints(rect)
+    #             box = np.int32(box)   
+    #             boxes.append(box)
+                
+    #     boxes_image = cv2.cvtColor(img.copy(),cv2.COLOR_GRAY2BGR)
+    #     if len(boxes) > 0:
+    #         cv2.drawContours(boxes_image, boxes, -1, (0,0,255), 2)
+            
+    #     return boxes_image,boxes
+    
     @staticmethod
     def extractionRect(img, contours):
-        boxes = []
-        for cnt in contours:
-            if len(cnt) < 3:
-                continue   # geçersiz contour
-            
-            area = cv2.contourArea(cnt)
-            if area > 1 and area < 10000:
-                rect = cv2.minAreaRect(cnt)
-                box = cv2.boxPoints(rect)
-                box = np.int32(box)   
-                boxes.append(box)
-                
+        boxes = []      
         boxes_image = cv2.cvtColor(img.copy(),cv2.COLOR_GRAY2BGR)
-        if len(boxes) > 0:
-            cv2.drawContours(boxes_image, boxes, -1, (0,0,255), 2)
-            
-        return boxes_image,boxes
+        
+        for cnt in contours:
+            area = cv2.contourArea(cnt)
+            if area < 300 or area > 6000:
+                continue
+
+            peri = cv2.arcLength(cnt, True)
+            approx = cv2.approxPolyDP(cnt, 0.02 * peri, True)
+
+            # if len(approx) not in [4,5,6]:
+            #     continue
+
+            x, y, w, h = cv2.boundingRect(approx)
+            ratio = w / h
+
+            if ratio  > 3.0:
+                boxes.append((x,y,w,h))
+        
+        print(f"Found {len(boxes)} boxes")
+        for x,y,w,h in boxes:
+            cv2.rectangle(boxes_image,(x,y),(x+w,y+h),(0,0,255),5)
+        return boxes_image, boxes
     
     # @staticmethod
     # def extractionRect(binary):
@@ -421,10 +580,10 @@ class Engine:
     def __init__(self):
         pass
     
-    def _print_process_step(self,img,text,coor=(50,50),color=(0,0,255)):
+    def _print_process_step(self,img,text,coor=(50,200),color=(0,0,255)):
         if len(img.shape) == 2:
             img = cv2.cvtColor(img,cv2.COLOR_GRAY2BGR)
-        cv2.putText(img,text,coor,cv2.FONT_HERSHEY_COMPLEX,1.5,color)
+        cv2.putText(img,text,coor,cv2.FONT_HERSHEY_DUPLEX,3.8,color,5)
         return img
     
     def skew(self,img):
@@ -459,11 +618,14 @@ class Engine:
         return img, so_fix
     
     def preprocess(self,img):
-        out = _EngineSteps.preprocess(img)    
+        out = _EngineSteps.preprocess(img,_EngineSteps.WIDTH,_EngineSteps.HEIGHT)    
         so_preprocess = self._print_process_step(out.copy(),"Preprocess")
         return out, so_preprocess
 
     def letterFilters(self,img):
+
+        img = _EngineSteps.letterfilter(img,_EngineSteps.kernelX)
+
         img = _EngineSteps.letterfilter(img,_EngineSteps.kernel1)
         img = _EngineSteps.letterfilter(img,_EngineSteps.kernel2)
         img = _EngineSteps.letterfilter(img,_EngineSteps.kernel1)
@@ -471,6 +633,17 @@ class Engine:
         img = _EngineSteps.letterfilter(img,_EngineSteps.kernel1)
         img = _EngineSteps.letterfilter(img,_EngineSteps.kernel2)
         img = _EngineSteps.letterfilter(img,_EngineSteps.kernel1)
+        img = _EngineSteps.letterfilter(img,_EngineSteps.kernel3)
+        img = _EngineSteps.letterfilter(img,_EngineSteps.kernel4)
+        # img = _EngineSteps.letterfilter(img,_EngineSteps.kernelX)
+        
+        # # img = _EngineSteps.letterfilter(img,_EngineSteps.kernel5)
+        # # img = _EngineSteps.letterfilter(img,_EngineSteps.kernel5)
+        # img = _EngineSteps.letterfilter(img,_EngineSteps.kernel6)
+        # img = _EngineSteps.letterfilter(img,_EngineSteps.kernel6)
+        # img = _EngineSteps.letterfilter(img,_EngineSteps.kernel6)
+        # img = _EngineSteps.letterfilter(img,_EngineSteps.kernel6)
+
         
         so_letter = self._print_process_step(img.copy(),"LetterFilter")
         return img, so_letter
@@ -495,18 +668,17 @@ class Engine:
         so_extraction_rect = self._print_process_step(extractionboxesim,"Rect Extraction")
         return extractionboxesim, boxes, so_extraction_rect
     
-    # def extractionRect(self,img,contours):
-        # extractionboxesim, boxes = _EngineSteps.extractionRect(img,contours)
-        # return extractionboxesim, boxes
-    
     def apply(self,img):
         fixed, so_fixed = self.fixation(img)
         skewed,so_skewed_projectprofile, so_skewed_tesseract = self.skew(fixed)
+        cv2.imwrite("./so_skewed.jpg",cv2.resize(skewed,(_EngineSteps.WIDTH,_EngineSteps.HEIGHT)))
         preprocessed, so_preprocesed = self.preprocess(skewed)
+        cv2.imwrite("./so_preprocessed.jpg",cv2.cvtColor(preprocessed,cv2.COLOR_GRAY2BGR))
         letterfiltered, so_letter_filtered = self.letterFilters(preprocessed)
-        blurfiltered, so_blured = self.blurFilter(letterfiltered)
-        saturationfiltered, so_saturated = self.saturationFilters(blurfiltered)
+        # blurfiltered, so_blured = self.blurFilter(letterfiltered)
+        saturationfiltered, so_saturated = self.saturationFilters(letterfiltered)
         extractioncontorsim, contours, so_contour = self.extractionContours(saturationfiltered)
+        cv2.imwrite("./so_counter.jpg",so_contour)
         extractionboxesim, boxes, so_extraction_Rect = self.extractionRect(saturationfiltered,contours)
         
         main_pipe_result = [
@@ -514,7 +686,7 @@ class Engine:
             skewed,
             preprocessed,
             letterfiltered,
-            blurfiltered,
+            # blurfiltered,
             saturationfiltered,
             extractioncontorsim,
             extractionboxesim
@@ -526,7 +698,7 @@ class Engine:
             so_skewed_projectprofile,
             so_preprocesed,
             so_letter_filtered,
-            so_blured,
+            # so_blured,
             so_saturated,
             so_contour,
             so_extraction_Rect
