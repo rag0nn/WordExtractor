@@ -34,3 +34,23 @@ class Line:
     
     def __repr__(self):
         return f"Line at: [x,y,w,h]{self.get_coor()}"
+    
+import pandas as pd
+
+class Saver:
+    def __init__(self, words: list):
+        """
+        words: Word instance'ları içeren liste
+        """
+        self.words = words
+
+    def to_dataframe(self) -> pd.DataFrame:
+        data = {
+            "word": [w.word for w in self.words],
+            "equviliant": [w.equivalent for w in self.words]
+        }
+        return pd.DataFrame(data)
+
+    def save(self, path: str):
+        df = self.to_dataframe()
+        df.to_csv(path, index=False)

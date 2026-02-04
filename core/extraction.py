@@ -1,11 +1,12 @@
 import cv2
 import numpy as np
 import pytesseract
+from pytesseract import Output
 import re
 import logging
 
 from typing import List
-from .elements import Line
+from .elements import Line, Word
 
 def extract_lines(img):
     orig = img.copy()
@@ -120,6 +121,57 @@ def expand_lines(lines: List[Line], y_range=50, x_range=80) -> List[Line]:
     logging.info(f"Expanded lines: {len(merged_lines)}")
     return merged_lines
             
+def extract_words(img,lines)->List[List[Word]]:
+    mask = np.zeros(img.shape[:2], dtype=np.uint8)
+    x_extra = 20
+    
+    segment_coords = []
+    for line in lines:
+        x1 = line.x-x_extra
+        x2 = line.x+line.w+x_extra
+        y1 = line.y+line.h-70
+        y2 = line.y+line.h+10
+        segment_coords.append((x1,x2,y1,y2))
+        mask[y1:y2,x1:x2] = 255
+
+    img = cv2.bitwise_and(img, img, mask=mask)
+    
+    words = []
+        
+    for line, segment_coor in zip(lines, segment_coords):
+        line:Line
+        
+        # determine segment
+        x_extra = 20
+        segment_x1,segment_x2,segment_y1,segment_y2 = segment_coor
+        roi = img[segment_y1:segment_y2,segment_x1:segment_x2]
+        data = pytesseract.image_to_data(
+            roi,
+            lang="eng",
+            output_type=Output.DICT
+        )
+
+        # find segment words
+        segment_words = []
+        for i in range(len(data["text"])):
+            word = data["text"][i].strip()
+            conf = int(data["conf"][i])
+
+            if word != "" and conf > 25:   # confidence filtresi
+                x = data["left"][i]
+                y = data["top"][i]
+                w = data["width"][i]
+                h = data["height"][i]
+                segment_words.append((word,conf,x,y,w,h))
+                
+        # concat segment words
+        if segment_words :
+            segment_word = " ".join(list( word[0] for word in segment_words))
+            segment_words = segment_words[::-1]
+            segment_x = min(list(word[2] for word in segment_words))
+            segment_y = segment_words[0][3]
+            segment_w = sum(list(wrd[4] for wrd in segment_words))
+            segment_conf = sum(list( wrd[1] for wrd in segment_words)) / len(segment_words)
+            words.append(Word(segment_word,segment_conf,line.x+segment_x-x_extra,line.y+segment_y-70,segment_w,h,0))
             
-            
-            
+    return words, img
