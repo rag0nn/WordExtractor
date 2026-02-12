@@ -2,6 +2,8 @@
 
 Bu proje, altı çizili metinleri işleyerek çeviri yapan ve sonuçları kaydeden bir Python uygulamasıdır. Hem grafik arayüz (GUI) hem de komut satırı üzerinden çalıştırılabilir.
 
+[Proje Linki](https://github.com/rag0nn/WordExtractor)
+
 ## Özellikler
 
 * Görsel yükleme ve görüntüleme.
